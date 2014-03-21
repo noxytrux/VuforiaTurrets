@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 public class ButtonHandler : MonoBehaviour, IVirtualButtonEventHandler {
 
-	// Use this for initialization
+	public GameObject currentTurret;
+
 	void Start () {
 	
 		VirtualButtonBehaviour[] vbs = GetComponentsInChildren<VirtualButtonBehaviour>();
@@ -15,9 +16,9 @@ public class ButtonHandler : MonoBehaviour, IVirtualButtonEventHandler {
 		}
 	}
 	
-	// Update is called once per frame
 	void Update () {
-	
+	//TODO: add colddown to fire!
+
 	}
 	
 	public void OnButtonPressed (VirtualButtonAbstractBehaviour vb)
@@ -25,7 +26,10 @@ public class ButtonHandler : MonoBehaviour, IVirtualButtonEventHandler {
 		VirtualButtonBehaviour vbc = vb as VirtualButtonBehaviour;
 
 		Debug.Log("Button pressed! " + vbc.VirtualButtonName);
-		
+
+		GameTurretController ctr = currentTurret.GetComponent<GameTurretController>();
+
+		ctr.FireBullet();
 	}
 	
 	public void OnButtonReleased (VirtualButtonAbstractBehaviour vb)	

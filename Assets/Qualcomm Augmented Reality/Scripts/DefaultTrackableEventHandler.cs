@@ -15,7 +15,18 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
     #region PRIVATE_MEMBER_VARIABLES
  
     private TrackableBehaviour mTrackableBehaviour;
-    
+	private TrackableBehaviour.Status currentStatus;
+	public Transform modelTransform;
+	public Transform turretTransform;
+	
+	private Vector2 objectPos;
+	private Vector2 touchPos;
+	private Vector2 currentPos;
+	private float ScreenWidth;
+
+	private float kMaxRotationSpeed = 35.0f;
+	private float axisAngle;
+
     #endregion // PRIVATE_MEMBER_VARIABLES
 
 
@@ -29,7 +40,75 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
         {
             mTrackableBehaviour.RegisterTrackableEventHandler(this);
         }
+
+		ScreenWidth = Screen.width;
+		axisAngle = 0.0f;
     }
+
+	void Update()
+	{
+		currentStatus = mTrackableBehaviour.CurrentStatus;
+
+		if( (Input.touchCount > 0) && 
+		    (currentStatus == TrackableBehaviour.Status.DETECTED ||
+		     currentStatus == TrackableBehaviour.Status.TRACKED ||
+		     currentStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)  )
+		{
+			//we can proceed with calculation
+
+			if(Input.GetTouch(0).phase == TouchPhase.Began) {
+					
+				objectPos = Camera.main.WorldToScreenPoint(modelTransform.position);
+				touchPos = Input.GetTouch(0).position;
+			}
+			else if(Input.GetTouch(0).phase == TouchPhase.Moved)
+			{
+				if(objectPos.x > (ScreenWidth * 0.5f) && touchPos.x > (ScreenWidth * 0.5f) ||
+				   objectPos.x < (ScreenWidth * 0.5f) && touchPos.x < (ScreenWidth * 0.5f) ) {
+
+					//both finger and object are on the same side
+
+					currentPos = Input.GetTouch(0).position;
+					Vector2 translation = touchPos - currentPos;
+				
+					if( translation.y < 0 )	{
+
+						axisAngle = turretTransform.localEulerAngles.z;
+						if( axisAngle > 180.0 ) axisAngle -= 360.0f;
+
+						Debug.Log("UP ( "+turretTransform.localEulerAngles.z+", "+axisAngle+" )");
+
+						if( axisAngle < 30.0f){
+
+							turretTransform.Rotate(0,0, kMaxRotationSpeed * Time.deltaTime);
+						}
+						else{
+
+							turretTransform.localEulerAngles = new Vector3(0,0,30.0f);
+						}
+					}
+					else {
+
+						axisAngle = turretTransform.localEulerAngles.z;
+						if( axisAngle < 180.0) axisAngle += 360.0f;
+					
+						Debug.Log("DOWN ( "+turretTransform.localEulerAngles.z+", "+axisAngle+" )");
+
+						if( axisAngle > 330.0f){
+
+							turretTransform.Rotate(0,0, -kMaxRotationSpeed * Time.deltaTime);
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+		
+		
+	}
 
     #endregion // UNTIY_MONOBEHAVIOUR_METHODS
 
@@ -56,7 +135,7 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
             OnTrackingLost();
         }
     }
-
+	
     #endregion // PUBLIC_METHODS
 
 
