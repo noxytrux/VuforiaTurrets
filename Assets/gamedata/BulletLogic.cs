@@ -23,6 +23,7 @@ public class BulletLogic : MonoBehaviour {
 	Quaternion quaternion3;
 	
 	void Start () {
+
 		balisticRotation = 0.0f;
 		acc = transform.right * 800.0f;
 		freeFall = -transform.up;
@@ -56,7 +57,6 @@ public class BulletLogic : MonoBehaviour {
 		transform.rotation = quaternion1 * quaternion2 * quaternion3;;
 
 		if( lifeTime > 20.0f ){
-			Debug.Log("Destorying Bullet");
 
 			Destroy(this.gameObject);
 		}

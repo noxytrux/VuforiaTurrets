@@ -24,19 +24,35 @@ public class ButtonHandler : MonoBehaviour, IVirtualButtonEventHandler {
 	public void OnButtonPressed (VirtualButtonAbstractBehaviour vb)
 	{
 		VirtualButtonBehaviour vbc = vb as VirtualButtonBehaviour;
-
-		Debug.Log("Button pressed! " + vbc.VirtualButtonName);
+		DefaultTrackableEventHandler trackableEvent = GetComponent<DefaultTrackableEventHandler>();
 
 		GameTurretController ctr = currentTurret.GetComponent<GameTurretController>();
 
-		ctr.FireBullet();
+		if( (vbc.VirtualButtonName == "redShootButton") ||
+		    (vbc.VirtualButtonName == "shootButtonBlue") ) {
+
+			ctr.FireBullet();
+		}
+		else  if( (vbc.VirtualButtonName == "blueUpButton") ||
+		         (vbc.VirtualButtonName == "redUpButton") ) {
+			
+			trackableEvent.turretUpFlag = true;
+		}
+		else  if( (vbc.VirtualButtonName == "blueDownButton") ||
+		         (vbc.VirtualButtonName == "redDownButton") ) {
+			
+			trackableEvent.turretDownFlag = true;
+		}
+
 	}
 	
 	public void OnButtonReleased (VirtualButtonAbstractBehaviour vb)	
 	{
 		VirtualButtonBehaviour vbc = vb as VirtualButtonBehaviour;
 
-		Debug.Log("Button released! " + vbc.VirtualButtonName);
-		
+		DefaultTrackableEventHandler trackableEvent = GetComponent<DefaultTrackableEventHandler>();
+
+		trackableEvent.turretUpFlag = false;
+		trackableEvent.turretDownFlag = false;
 	}
 }

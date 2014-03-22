@@ -27,6 +27,9 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 	private float kMaxRotationSpeed = 35.0f;
 	private float axisAngle;
 
+	public bool turretUpFlag;
+	public bool turretDownFlag;
+
     #endregion // PRIVATE_MEMBER_VARIABLES
 
 
@@ -43,6 +46,9 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
 		ScreenWidth = Screen.width;
 		axisAngle = 0.0f;
+
+		turretDownFlag = false;
+		turretUpFlag = false;
     }
 
 	void Update()
@@ -73,32 +79,11 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 				
 					if( translation.y < 0 )	{
 
-						axisAngle = turretTransform.localEulerAngles.z;
-						if( axisAngle > 180.0 ) axisAngle -= 360.0f;
-
-						Debug.Log("UP ( "+turretTransform.localEulerAngles.z+", "+axisAngle+" )");
-
-						if( axisAngle < 30.0f){
-
-							turretTransform.Rotate(0,0, kMaxRotationSpeed * Time.deltaTime);
-						}
-						else{
-
-							turretTransform.localEulerAngles = new Vector3(0,0,30.0f);
-						}
+						TurretUp();
 					}
 					else {
 
-						axisAngle = turretTransform.localEulerAngles.z;
-						if( axisAngle < 180.0) axisAngle += 360.0f;
-					
-						Debug.Log("DOWN ( "+turretTransform.localEulerAngles.z+", "+axisAngle+" )");
-
-						if( axisAngle > 330.0f){
-
-							turretTransform.Rotate(0,0, -kMaxRotationSpeed * Time.deltaTime);
-						}
-
+						TurretDown();
 					}
 
 				}
@@ -107,19 +92,21 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
 		}
 		
-		
+		if(turretUpFlag) {
+
+			TurretUp();
+		}
+
+		if(turretDownFlag) {
+
+			TurretDown();
+		}
 	}
 
     #endregion // UNTIY_MONOBEHAVIOUR_METHODS
-
-
-
+	
     #region PUBLIC_METHODS
 
-    /// <summary>
-    /// Implementation of the ITrackableEventHandler function called when the
-    /// tracking state changes.
-    /// </summary>
     public void OnTrackableStateChanged(
                                     TrackableBehaviour.Status previousStatus,
                                     TrackableBehaviour.Status newStatus)
@@ -135,7 +122,38 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
             OnTrackingLost();
         }
     }
+
+	void TurretUp() {
+
+		Debug.Log("Turret UP!");
+
+		axisAngle = turretTransform.localEulerAngles.z;
+		if( axisAngle > 180.0 ) axisAngle -= 360.0f;
+		
+		if( axisAngle < 30.0f){
+			
+			turretTransform.Rotate(0,0, kMaxRotationSpeed * Time.deltaTime);
+		}
+		else{
+			
+			turretTransform.localEulerAngles = new Vector3(0,0,30.0f);
+		}
+	}
+
+	void TurretDown() {
+
+		Debug.Log("Turret DOWN!");
+
+		axisAngle = turretTransform.localEulerAngles.z;
+		if( axisAngle < 180.0) axisAngle += 360.0f;
+		
+		if( axisAngle > 330.0f){
+			
+			turretTransform.Rotate(0,0, -kMaxRotationSpeed * Time.deltaTime);
+		}
+	}
 	
+
     #endregion // PUBLIC_METHODS
 
 
