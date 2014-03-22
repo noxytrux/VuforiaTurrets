@@ -34,25 +34,24 @@ public class ButtonHandler : MonoBehaviour, IVirtualButtonEventHandler {
 			ctr.FireBullet();
 		}
 		else  if( (vbc.VirtualButtonName == "blueUpButton") ||
-		         (vbc.VirtualButtonName == "redUpButton") ) {
+		          (vbc.VirtualButtonName == "redUpButton") ) {
 			
-			trackableEvent.turretUpFlag = true;
+			trackableEvent.OnTurretUp();
 		}
 		else  if( (vbc.VirtualButtonName == "blueDownButton") ||
-		         (vbc.VirtualButtonName == "redDownButton") ) {
+		          (vbc.VirtualButtonName == "redDownButton") ) {
 			
-			trackableEvent.turretDownFlag = true;
+			trackableEvent.OnTurretDown();
 		}
 
 	}
 	
 	public void OnButtonReleased (VirtualButtonAbstractBehaviour vb)	
 	{
-		VirtualButtonBehaviour vbc = vb as VirtualButtonBehaviour;
+		//VirtualButtonBehaviour vbc = vb as VirtualButtonBehaviour;
 
 		DefaultTrackableEventHandler trackableEvent = GetComponent<DefaultTrackableEventHandler>();
 
-		trackableEvent.turretUpFlag = false;
-		trackableEvent.turretDownFlag = false;
+		trackableEvent.StopInteraction();
 	}
 }

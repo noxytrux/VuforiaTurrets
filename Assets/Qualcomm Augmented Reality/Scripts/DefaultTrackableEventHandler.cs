@@ -27,13 +27,14 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 	private float kMaxRotationSpeed = 35.0f;
 	private float axisAngle;
 
-	public bool turretUpFlag;
-	public bool turretDownFlag;
+	private bool turretUpFlag;
+	private bool turretDownFlag;
+
+	private Vector3 lastPosition;
+	private float markerDistance;
 
     #endregion // PRIVATE_MEMBER_VARIABLES
-
-
-
+	
     #region UNTIY_MONOBEHAVIOUR_METHODS
     
     void Start()
@@ -49,6 +50,9 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
 		turretDownFlag = false;
 		turretUpFlag = false;
+
+		lastPosition = transform.position;
+		markerDistance = 0.0f;
     }
 
 	void Update()
@@ -91,7 +95,10 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 			}
 
 		}
-		
+
+		markerDistance = Vector3.Distance( lastPosition, transform.position);
+		lastPosition = transform.position;
+
 		if(turretUpFlag) {
 
 			TurretUp();
@@ -106,6 +113,30 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
     #endregion // UNTIY_MONOBEHAVIOUR_METHODS
 	
     #region PUBLIC_METHODS
+
+	public void OnTurretUp() {
+
+		if( markerDistance < 5.0 ) {
+				
+			turretUpFlag = true;
+		}
+
+	}
+
+	public void OnTurretDown() {
+
+		if( markerDistance < 5.0 ) {
+			
+			turretDownFlag = true;
+		}
+
+	}
+
+	public void StopInteraction() {
+	
+		turretUpFlag = false;
+		turretDownFlag = false;
+	}
 
     public void OnTrackableStateChanged(
                                     TrackableBehaviour.Status previousStatus,
