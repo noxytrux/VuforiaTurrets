@@ -33,6 +33,9 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 	private Vector3 lastPosition;
 	private float markerDistance;
 
+	private bool isAlive;
+	private float currentHealts;
+
     #endregion // PRIVATE_MEMBER_VARIABLES
 	
     #region UNTIY_MONOBEHAVIOUR_METHODS
@@ -53,66 +56,89 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
 		lastPosition = transform.position;
 		markerDistance = 0.0f;
+
+		isAlive = true;
+		currentHealts = 100.0f;
     }
 
 	void Update()
 	{
-		currentStatus = mTrackableBehaviour.CurrentStatus;
+		if(isAlive) {
 
-		if( (Input.touchCount > 0) && 
-		    (currentStatus == TrackableBehaviour.Status.DETECTED ||
-		     currentStatus == TrackableBehaviour.Status.TRACKED ||
-		     currentStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)  )
-		{
-			//we can proceed with calculation
-
-			if(Input.GetTouch(0).phase == TouchPhase.Began) {
-					
-				objectPos = Camera.main.WorldToScreenPoint(modelTransform.position);
-				touchPos = Input.GetTouch(0).position;
-			}
-			else if(Input.GetTouch(0).phase == TouchPhase.Moved)
+			currentStatus = mTrackableBehaviour.CurrentStatus;
+			
+			if( (Input.touchCount > 0) && 
+			   (currentStatus == TrackableBehaviour.Status.DETECTED ||
+			 currentStatus == TrackableBehaviour.Status.TRACKED ||
+			 currentStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)  )
 			{
-				if(objectPos.x > (ScreenWidth * 0.5f) && touchPos.x > (ScreenWidth * 0.5f) ||
-				   objectPos.x < (ScreenWidth * 0.5f) && touchPos.x < (ScreenWidth * 0.5f) ) {
-
-					//both finger and object are on the same side
-
-					currentPos = Input.GetTouch(0).position;
-					Vector2 translation = touchPos - currentPos;
+				//we can proceed with calculation
 				
-					if( translation.y < 0 )	{
-
-						TurretUp();
-					}
-					else {
-
-						TurretDown();
-					}
-
+				if(Input.GetTouch(0).phase == TouchPhase.Began) {
+					
+					objectPos = Camera.main.WorldToScreenPoint(modelTransform.position);
+					touchPos = Input.GetTouch(0).position;
 				}
-
+				else if(Input.GetTouch(0).phase == TouchPhase.Moved)
+				{
+					if(objectPos.x > (ScreenWidth * 0.5f) && touchPos.x > (ScreenWidth * 0.5f) ||
+					   objectPos.x < (ScreenWidth * 0.5f) && touchPos.x < (ScreenWidth * 0.5f) ) {
+						
+						//both finger and object are on the same side
+						
+						currentPos = Input.GetTouch(0).position;
+						Vector2 translation = touchPos - currentPos;
+						
+						if( translation.y < 0 )	{
+							
+							TurretUp();
+						}
+						else {
+							
+							TurretDown();
+						}
+						
+					}
+					
+				}
+				
 			}
-
+			
+			markerDistance = Vector3.Distance( lastPosition, transform.position);
+			lastPosition = transform.position;
+			
+			if(turretUpFlag) {
+				
+				TurretUp();
+			}
+			
+			if(turretDownFlag) {
+				
+				TurretDown();
+			}
 		}
 
-		markerDistance = Vector3.Distance( lastPosition, transform.position);
-		lastPosition = transform.position;
-
-		if(turretUpFlag) {
-
-			TurretUp();
-		}
-
-		if(turretDownFlag) {
-
-			TurretDown();
-		}
 	}
 
     #endregion // UNTIY_MONOBEHAVIOUR_METHODS
 	
     #region PUBLIC_METHODS
+
+	public void ApplyDamage() {
+
+		currentHealts -= 10.0f;
+
+		if( currentHealts <= 0.0f ) {
+
+			//TODO: put here some nice explosion
+
+			currentHealts = 0.0f;
+			isAlive = false;
+
+			OnTrackingLost();
+		}
+
+	}
 
 	public void OnTurretUp() {
 
@@ -142,9 +168,9 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
                                     TrackableBehaviour.Status previousStatus,
                                     TrackableBehaviour.Status newStatus)
     {
-        if (newStatus == TrackableBehaviour.Status.DETECTED ||
-            newStatus == TrackableBehaviour.Status.TRACKED ||
-            newStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)
+        if ((newStatus == TrackableBehaviour.Status.DETECTED ||
+             newStatus == TrackableBehaviour.Status.TRACKED ||
+             newStatus == TrackableBehaviour.Status.EXTENDED_TRACKED) && isAlive )
         {
             OnTrackingFound();
         }
