@@ -14,20 +14,19 @@ public class GameTurretController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 
 	public void FireBullet () {
 
-		Debug.Log(gameObject.name + " Shooting!");
-
-
-		GameObject bullet = (GameObject)Instantiate(bulletPrefab, gunTransform.position + gunTransform.forward * 30.0f, gunTransform.rotation);
+		GameObject bullet = (GameObject)Instantiate( bulletPrefab, 
+		                                        	 gunTransform.position + gunTransform.right * 300.0f, 
+		                                         	 gunTransform.rotation );
 		
 		if(bullet.collider) {
+
 			Physics.IgnoreCollision(gunTransform.collider, bullet.collider);
 		}
-		
-		bullet.rigidbody.AddRelativeForce(gunTransform.forward * 400.0f);
+	
 	}
 }
