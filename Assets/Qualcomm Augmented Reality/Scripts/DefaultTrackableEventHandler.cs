@@ -142,7 +142,9 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
 	public void OnTurretUp() {
 
-		if( markerDistance < 5.0 ) {
+		Debug.Log("OnTurretUp()");
+
+		if( markerDistance < 8.0 ) {
 				
 			turretUpFlag = true;
 		}
@@ -151,7 +153,9 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
 	public void OnTurretDown() {
 
-		if( markerDistance < 5.0 ) {
+		Debug.Log("OnTurretDown()");
+
+		if( markerDistance < 8.0 ) {
 			
 			turretDownFlag = true;
 		}
