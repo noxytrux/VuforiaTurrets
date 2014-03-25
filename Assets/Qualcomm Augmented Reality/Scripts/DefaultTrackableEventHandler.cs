@@ -142,7 +142,7 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
 	public void OnTurretUp() {
 
-		Debug.Log("OnTurretUp()");
+		Debug.Log("OnTurretUp() " + markerDistance);
 
 		if( markerDistance < 8.0 ) {
 				
@@ -153,7 +153,7 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
 	public void OnTurretDown() {
 
-		Debug.Log("OnTurretDown()");
+		Debug.Log("OnTurretDown() " + markerDistance);
 
 		if( markerDistance < 8.0 ) {
 			
@@ -186,8 +186,6 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
 	void TurretUp() {
 
-		Debug.Log("Turret UP!");
-
 		axisAngle = turretTransform.localEulerAngles.z;
 		if( axisAngle > 180.0 ) axisAngle -= 360.0f;
 		
@@ -202,8 +200,6 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 	}
 
 	void TurretDown() {
-
-		Debug.Log("Turret DOWN!");
 
 		axisAngle = turretTransform.localEulerAngles.z;
 		if( axisAngle < 180.0) axisAngle += 360.0f;
