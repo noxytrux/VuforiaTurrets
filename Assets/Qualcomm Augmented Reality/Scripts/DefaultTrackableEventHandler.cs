@@ -36,6 +36,8 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 	private bool isAlive;
 	private float currentHealts;
 
+	private const float maxDistanceMovement = 6.0f;
+
     #endregion // PRIVATE_MEMBER_VARIABLES
 	
     #region UNTIY_MONOBEHAVIOUR_METHODS
@@ -144,9 +146,13 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
 		Debug.Log("OnTurretUp() " + markerDistance);
 
-		if( markerDistance < 8.0 ) {
+		if( markerDistance < maxDistanceMovement && !turretDownFlag ) {
 				
 			turretUpFlag = true;
+		}
+		else {
+				
+			turretUpFlag = false;
 		}
 
 	}
@@ -155,9 +161,13 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
 		Debug.Log("OnTurretDown() " + markerDistance);
 
-		if( markerDistance < 8.0 ) {
+		if( markerDistance < maxDistanceMovement && !turretUpFlag ) {
 			
 			turretDownFlag = true;
+		}
+		else{
+
+			turretDownFlag = false;
 		}
 
 	}
@@ -189,13 +199,13 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 		axisAngle = turretTransform.localEulerAngles.z;
 		if( axisAngle > 180.0 ) axisAngle -= 360.0f;
 		
-		if( axisAngle < 30.0f){
+		if( axisAngle < 20.0f){
 			
 			turretTransform.Rotate(0,0, kMaxRotationSpeed * Time.deltaTime);
 		}
 		else{
 			
-			turretTransform.localEulerAngles = new Vector3(0,0,30.0f);
+			turretTransform.localEulerAngles = new Vector3(0,0,20.0f);
 		}
 	}
 
@@ -204,7 +214,7 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 		axisAngle = turretTransform.localEulerAngles.z;
 		if( axisAngle < 180.0) axisAngle += 360.0f;
 		
-		if( axisAngle > 330.0f){
+		if( axisAngle > 340.0f){
 			
 			turretTransform.Rotate(0,0, -kMaxRotationSpeed * Time.deltaTime);
 		}
