@@ -38,6 +38,9 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
 	private const float maxDistanceMovement = 6.0f;
 
+	public GameObject explosionPrefab;
+	public GameObject smokeExplosionPefab;
+	
     #endregion // PRIVATE_MEMBER_VARIABLES
 	
     #region UNTIY_MONOBEHAVIOUR_METHODS
@@ -134,7 +137,8 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
 		if( currentHealts <= 0.0f ) {
 
-			//TODO: put here some nice explosion
+			Instantiate(explosionPrefab, transform.position, transform.rotation);
+			Instantiate(smokeExplosionPefab, transform.position, transform.rotation);
 
 			currentHealts = 0.0f;
 			isAlive = false;
@@ -145,8 +149,6 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 	}
 
 	public void OnTurretUp() {
-
-		Debug.Log("OnTurretUp() " + markerDistance);
 
 		if( (markerDistance < maxDistanceMovement) && !turretDownFlag ) {
 				
@@ -160,8 +162,6 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 	}
 
 	public void OnTurretDown() {
-
-		Debug.Log("OnTurretDown() " + markerDistance);
 
 		if( (markerDistance < maxDistanceMovement) && !turretUpFlag ) {
 			
@@ -247,8 +247,6 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
             component.enabled = true;
         }
 
-        Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
-
 		HealtBarScript healtBar = modelTransform.gameObject.GetComponent<HealtBarScript>();
 		healtBar.OnVisible();
     }
@@ -270,8 +268,6 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
         {
             component.enabled = false;
         }
-
-        Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
 
 		HealtBarScript healtBar = modelTransform.gameObject.GetComponent<HealtBarScript>();
 		healtBar.OnHidden();

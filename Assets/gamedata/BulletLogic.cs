@@ -65,11 +65,12 @@ public class BulletLogic : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision) {
 
-		Transform trans = collision.gameObject.transform.root.GetChild(0);
+		if( ( collision.gameObject.name == "RedPlane" ) || 
+		    ( collision.gameObject.name == "BluePlane" ) ) {
 
-		if(trans) {
-			Debug.Log("Collision! " + trans.gameObject.name);
-			//We propably hit Turret apply damane here
+			Debug.Log("Skip collision");
+		}
+		else{
 
 			DefaultTrackableEventHandler handler = collision.gameObject.transform.root.gameObject.GetComponent<DefaultTrackableEventHandler>();
 			handler.ApplyDamage();
