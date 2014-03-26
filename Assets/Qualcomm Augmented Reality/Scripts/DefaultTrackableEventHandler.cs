@@ -146,7 +146,7 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
 		Debug.Log("OnTurretUp() " + markerDistance);
 
-		if( markerDistance < maxDistanceMovement && !turretDownFlag ) {
+		if( (markerDistance < maxDistanceMovement) && !turretDownFlag ) {
 				
 			turretUpFlag = true;
 		}
@@ -161,7 +161,7 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
 		Debug.Log("OnTurretDown() " + markerDistance);
 
-		if( markerDistance < maxDistanceMovement && !turretUpFlag ) {
+		if( (markerDistance < maxDistanceMovement) && !turretUpFlag ) {
 			
 			turretDownFlag = true;
 		}
