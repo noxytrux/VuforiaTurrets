@@ -33,7 +33,9 @@ public class ButtonHandler : MonoBehaviour, IVirtualButtonEventHandler {
 		if( (vbc.VirtualButtonName == "redShootButton") ||
 		    (vbc.VirtualButtonName == "shootButtonBlue") ) {
 
-			ctr.FireBullet();
+			if(trackableEvent.isAlive) {
+				ctr.FireBullet();
+			}
 		}
 		else  if( (vbc.VirtualButtonName == "blueUpButton") ||
 		          (vbc.VirtualButtonName == "redUpButton") ) {

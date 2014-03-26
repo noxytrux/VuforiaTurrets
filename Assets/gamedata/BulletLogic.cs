@@ -71,6 +71,8 @@ public class BulletLogic : MonoBehaviour {
 			Debug.Log("Collision! " + trans.gameObject.name);
 			//We propably hit Turret apply damane here
 
+			DefaultTrackableEventHandler handler = collision.gameObject.transform.root.gameObject.GetComponent<DefaultTrackableEventHandler>();
+			handler.ApplyDamage();
 		}
 
 		ContactPoint contact = collision.contacts[0];

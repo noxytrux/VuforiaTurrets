@@ -33,7 +33,7 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 	private Vector3 lastPosition;
 	private float markerDistance;
 
-	private bool isAlive;
+	public bool isAlive;
 	private float currentHealts;
 
 	private const float maxDistanceMovement = 6.0f;
@@ -66,6 +66,8 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 	void Update()
 	{
 		if(isAlive) {
+
+			modelTransform.gameObject.GetComponent<HealtBarScript>().hp = currentHealts;
 
 			currentStatus = mTrackableBehaviour.CurrentStatus;
 			
@@ -246,6 +248,9 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
         }
 
         Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
+
+		HealtBarScript healtBar = modelTransform.gameObject.GetComponent<HealtBarScript>();
+		healtBar.OnVisible();
     }
 
 
@@ -267,6 +272,9 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
         }
 
         Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
+
+		HealtBarScript healtBar = modelTransform.gameObject.GetComponent<HealtBarScript>();
+		healtBar.OnHidden();
     }
 
     #endregion // PRIVATE_METHODS
