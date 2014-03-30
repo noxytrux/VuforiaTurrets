@@ -49,7 +49,7 @@ public class ButtonHandler : MonoBehaviour, IVirtualButtonEventHandler {
 	
 	public void OnButtonReleased (VirtualButtonAbstractBehaviour vb)	
 	{
-		VirtualButtonBehaviour vbc = vb as VirtualButtonBehaviour;
+		//VirtualButtonBehaviour vbc = vb as VirtualButtonBehaviour;
 
 		DefaultTrackableEventHandler trackableEvent = GetComponent<DefaultTrackableEventHandler>();
 
