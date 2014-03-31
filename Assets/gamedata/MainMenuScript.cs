@@ -33,7 +33,7 @@ public class MainMenuScript : MonoBehaviour
 
 		if (GUI.Button(new Rect(maxWidht - 450,maxHeight - 120,408,86), "HELP", style))
 		{
-
+			Application.LoadLevel("helpScene");
 		}
 
 	}
